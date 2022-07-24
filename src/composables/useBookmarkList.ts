@@ -11,19 +11,24 @@ export const useBookmarkList = (bookmarkService: BookmarkService) => {
   const isFiltering = ref(false);
   const toggleFilter = () => (isFiltering.value = !isFiltering.value);
 
+  const isRecentSorting = ref(false);
+  const toggleRecentSort = () =>
+    (isRecentSorting.value = !isRecentSorting.value);
+
   const searchString = ref<string>();
   const bookmarks = ref<Bookmark[]>([]);
   const getBookmarks = async () =>
     (bookmarks.value = await bookmarkService.getBookmarks(
       searchString.value,
       isSorting.value,
-      isFiltering.value
+      isFiltering.value,
+      isRecentSorting.value
     ));
 
   onMounted(async () => await getBookmarks());
 
   watch(
-    [searchString, isSorting, isFiltering],
+    [searchString, isSorting, isFiltering, isRecentSorting],
     async () => await getBookmarks()
   );
   const toggleFavorite = async (bookmarkId: string) => {
@@ -37,11 +42,13 @@ export const useBookmarkList = (bookmarkService: BookmarkService) => {
     bookmarks,
     getBookmarks,
     isFiltering,
+    isRecentSorting,
     isSorting,
     openBookmark,
     searchString,
     toggleFavorite,
     toggleFilter,
+    toggleRecentSort,
     toggleSort,
   };
 };
@@ -120,7 +127,7 @@ if (import.meta.vitest) {
         composable.getBookmarks();
         await nextTick();
 
-        expect(getBookmarks).toHaveBeenCalledWith("test", true, true);
+        expect(getBookmarks).toHaveBeenCalledWith("test", true, true, false);
         expect(composable.bookmarks.value).toEqual(bookmarks);
       });
     });

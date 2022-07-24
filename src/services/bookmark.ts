@@ -2,14 +2,16 @@ import { BookmarkData, bookmarkData } from "../data/bookmark";
 import { FavoriteService, favoriteService } from "../services/favorite";
 import { TagService, tagService } from "../services/tag";
 import { Bookmark, NewBookmark } from "../types";
-import { byProperty } from "../utils/compare";
+import { byLastUsed, byProperty } from "../utils/compare";
+import { RecentService, recentService } from "./recent";
 import { TabService, tabService } from "./tab";
 
 export const createBookmarkService = (
   bookmarkData: BookmarkData,
   tagService: TagService,
   favoriteService: FavoriteService,
-  tabService: TabService
+  tabService: TabService,
+  recentService: RecentService
 ) => {
   const getSearchItems = (bookmark: Bookmark) =>
     [bookmark.title, bookmark.url, ...(bookmark.tags ?? [])].map((item) =>
@@ -30,26 +32,38 @@ export const createBookmarkService = (
       isFiltering ? favoriteService.isFavorite(bookmark.id) : true
     );
 
-  const applySort = (bookmarks: Bookmark[], isSorting: boolean) =>
+  const applyAlphabeticalSort = (bookmarks: Bookmark[], isSorting: boolean) =>
     [...bookmarks].sort(byProperty("title", isSorting));
+
+  const applyRecentSort = (bookmarks: Bookmark[], isRecentSorting: boolean) =>
+    isRecentSorting ? [...bookmarks].sort(byLastUsed) : bookmarks;
 
   const getBookmarks = async (
     search?: string,
     isSorting?: boolean,
-    isFiltering?: boolean
+    isFiltering?: boolean,
+    isRecentSorting?: boolean
   ) => {
     const bookmarkItems = (await bookmarkData.getBookmarks()).map(
       (bookmark) => ({
         ...bookmark,
         isFavorite: favoriteService.isFavorite(bookmark.id),
+        lastUsed: recentService.getLastUsedForBookmark(bookmark.id),
         tags: tagService.getTagsForBookmark(bookmark.id) ?? [],
         title: bookmark.title ? bookmark.title : "[No Title]",
       })
     );
     const searchResults = applySearch(bookmarkItems, search);
     const filteredBookmarks = applyFilters(searchResults, !!isFiltering);
-    const sortedBookmarks = applySort(filteredBookmarks, !!isSorting);
-    return sortedBookmarks;
+    const alphabeticallySortedBookmarks = applyAlphabeticalSort(
+      filteredBookmarks,
+      !!isSorting
+    );
+    const recentlySortedBookmarks = applyRecentSort(
+      alphabeticallySortedBookmarks,
+      !!isRecentSorting
+    );
+    return recentlySortedBookmarks;
   };
 
   const getBookmark = async (bookmarkId: string) => {
@@ -85,12 +99,13 @@ export const createBookmarkService = (
     await bookmarkData.removeBookmark(bookmarkId);
     favoriteService.removeFavorite(bookmarkId);
     tagService.setTags(bookmarkId);
+    recentService.removeRecent(bookmarkId);
   };
 
   const getSupportedProtocols = () => bookmarkData.getSupportedProtocols();
 
   const openBookmark = async (bookmark: Bookmark) =>
-    await tabService.openTab(bookmark.url, bookmark.isReaderMode);
+    await tabService.openTab(bookmark.id, bookmark.url, bookmark.isReaderMode);
 
   return {
     createBookmark,
@@ -109,7 +124,8 @@ export const bookmarkService = createBookmarkService(
   bookmarkData,
   tagService,
   favoriteService,
-  tabService
+  tabService,
+  recentService
 );
 export type BookmarkService = typeof bookmarkService;
 
@@ -129,6 +145,11 @@ if (import.meta.vitest) {
           isFavorite: vi.fn(),
           removeFavorite: vi.fn(),
           toggleFavorite: vi.fn(),
+        };
+        const recentService: RecentService = {
+          getLastUsedForBookmark: vi.fn(),
+          removeRecent: vi.fn(),
+          setRecentlyUsed: vi.fn(),
         };
 
         const bookmark = {
@@ -151,7 +172,8 @@ if (import.meta.vitest) {
           bookmarkData,
           tagService,
           favoriteService,
-          tabService
+          tabService,
+          recentService
         );
 
         const result = await bookmarkService.createBookmark(bookmark);
@@ -203,7 +225,8 @@ if (import.meta.vitest) {
           bookmarkData,
           tagService,
           favoriteService,
-          tabService
+          tabService,
+          recentService
         );
 
         const result = await bookmarkService.getBookmark(bookmark.id);
@@ -245,7 +268,8 @@ if (import.meta.vitest) {
           bookmarkData,
           tagService,
           favoriteService,
-          tabService
+          tabService,
+          recentService
         );
 
         const result = await bookmarkService.getBookmarks("exa");
@@ -285,7 +309,8 @@ if (import.meta.vitest) {
           bookmarkData,
           tagService,
           favoriteService,
-          tabService
+          tabService,
+          recentService
         );
 
         const result = await bookmarkService.getBookmarks("ta");
@@ -325,13 +350,14 @@ if (import.meta.vitest) {
           bookmarkData,
           tagService,
           favoriteService,
-          tabService
+          tabService,
+          recentService
         );
 
         const result = await bookmarkService.getBookmarks("tit");
         expect(result).toEqual([bookmark]);
       });
-      it("applies sort", async () => {
+      it("applies alphabetical sort", async () => {
         const bookmark1 = {
           id: "1",
           isFavorite: false,
@@ -372,7 +398,8 @@ if (import.meta.vitest) {
           bookmarkData,
           tagService,
           favoriteService,
-          tabService
+          tabService,
+          recentService
         );
 
         const result = await bookmarkService.getBookmarks(undefined, true);
@@ -412,7 +439,8 @@ if (import.meta.vitest) {
           bookmarkData,
           tagService,
           favoriteService,
-          tabService
+          tabService,
+          recentService
         );
 
         const result = await bookmarkService.getBookmarks(
@@ -452,7 +480,8 @@ if (import.meta.vitest) {
           bookmarkData,
           tagService,
           favoriteService,
-          tabService
+          tabService,
+          recentService
         );
 
         const result = bookmarkService.getSupportedProtocols();
@@ -491,7 +520,8 @@ if (import.meta.vitest) {
           bookmarkData,
           tagService,
           favoriteService,
-          tabService
+          tabService,
+          recentService
         );
 
         await bookmarkService.openBookmark({
@@ -539,7 +569,8 @@ if (import.meta.vitest) {
           bookmarkData,
           tagService,
           favoriteService,
-          tabService
+          tabService,
+          recentService
         );
 
         await bookmarkService.removeBookmark(bookmark.id);
@@ -585,7 +616,8 @@ if (import.meta.vitest) {
           bookmarkData,
           tagService,
           favoriteService,
-          tabService
+          tabService,
+          recentService
         );
 
         await bookmarkService.updateBookmark(bookmark);

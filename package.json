@@ -10,6 +10,8 @@
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@vueuse/components": "^8.9.4",
+    "@vueuse/core": "^8.9.4",
     "vue": "^3.2.16"
   },
   "devDependencies": {

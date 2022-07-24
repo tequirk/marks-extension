@@ -32,11 +32,13 @@ const {
   bookmarks,
   isSorting,
   isFiltering,
+  isRecentSorting,
   getBookmarks,
   toggleSort,
   toggleFilter,
   toggleFavorite,
   openBookmark,
+  toggleRecentSort,
 } = useBookmarkList(bookmarkService);
 
 const {
@@ -90,7 +92,13 @@ const { toggleTheme, isDarkTheme } = useTheme(themeService);
               "
             />
             <IconButtonContainer>
-              <IconButton title="Sort List" @click="toggleSort">
+              <IconButton
+                title="Sort List by Recently Used"
+                @click="toggleRecentSort"
+              >
+                {{ isRecentSorting ? Icon.QuadrantCircle : Icon.ClosedCircle }}
+              </IconButton>
+              <IconButton title="Sort List Alphabetically" @click="toggleSort">
                 {{ isSorting ? Icon.Descending : Icon.Ascending }}
               </IconButton>
               <IconButton title="Filter List" @click="toggleFilter">
