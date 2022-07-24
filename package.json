@@ -1,6 +1,6 @@
 {
   "name": "marks",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "scripts": {
     "dev": "web-ext run --config web-ext.config.js & nodemon -e css,html,json,js,ts,vue --watch src/ --exec \"npm run build-lite\"",
     "build-lite": "vite build",
