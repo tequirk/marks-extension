@@ -90,13 +90,15 @@ const { toggleTheme, isDarkTheme } = useTheme(themeService);
               "
             />
             <IconButtonContainer>
-              <IconButton @click="toggleSort">
+              <IconButton title="Sort List" @click="toggleSort">
                 {{ isSorting ? Icon.Descending : Icon.Ascending }}
               </IconButton>
-              <IconButton @click="toggleFilter">
+              <IconButton title="Filter List" @click="toggleFilter">
                 {{ isFiltering ? Icon.Favorite : Icon.NotFavorite }}
               </IconButton>
-              <IconButton @click="addBookmark()">{{ Icon.Add }}</IconButton>
+              <IconButton title="Add Bookmark" @click="addBookmark()">{{
+                Icon.Add
+              }}</IconButton>
             </IconButtonContainer>
           </CommandPaletteControls>
           <List :items="bookmarks">

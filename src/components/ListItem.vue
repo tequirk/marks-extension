@@ -34,11 +34,15 @@ defineEmits<{
         </div>
       </template>
       <template v-else>
-        <IconButton @click="$emit('favorite-clicked', bookmark.id)">
+        <IconButton
+          title="Favorite Bookmark"
+          @click="$emit('favorite-clicked', bookmark.id)"
+        >
           {{ bookmark.isFavorite ? Icon.Favorite : Icon.NotFavorite }}
         </IconButton>
         <IconButton
           v-if="!isEditing"
+          title="Edit Bookmark"
           @click="$emit('edit-clicked', bookmark.id)"
         >
           {{ Icon.Pencil }}
