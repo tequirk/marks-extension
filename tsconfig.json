@@ -10,7 +10,7 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "lib": ["esnext", "dom"],
-    "types": ["vitest/importMeta", "@types/webextension-polyfill"]
+    "types": ["vitest/importMeta", "@types/webextension-polyfill", "web-bluetooth"]
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "plugins/**/*.ts"]
 }

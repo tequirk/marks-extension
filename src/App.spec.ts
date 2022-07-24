@@ -32,11 +32,13 @@ const useBookmarkList = (
   bookmarks: options?.bookmarks ?? ref([]),
   getBookmarks: options?.getBookmarks ?? vi.fn().mockReturnValue([]),
   isFiltering: options?.isFiltering ?? ref(false),
+  isRecentSorting: options?.isRecentSorting ?? ref(false),
   isSorting: options?.isSorting ?? ref(false),
   openBookmark: options?.openBookmark ?? vi.fn(),
   searchString: options?.searchString ?? ref(""),
   toggleFavorite: options?.toggleFavorite ?? vi.fn(),
   toggleFilter: options?.toggleFilter ?? vi.fn(),
+  toggleRecentSort: options?.toggleRecentSort ?? vi.fn(),
   toggleSort: options?.toggleSort ?? vi.fn(),
 });
 

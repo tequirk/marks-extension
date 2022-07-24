@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { UseTimeAgo } from "@vueuse/components";
+
 import { Bookmark, Icon } from "../types";
 import IconButton from "./IconButton.vue";
 import IconButtonContainer from "./IconButtonContainer.vue";
@@ -34,6 +36,15 @@ defineEmits<{
         </div>
       </template>
       <template v-else>
+        <span
+          v-if="bookmark.lastUsed"
+          class="mx-2"
+          :title="bookmark.lastUsed.toLocaleString()"
+        >
+          <UseTimeAgo v-slot="{ timeAgo }" :time="bookmark.lastUsed">
+            {{ timeAgo }}
+          </UseTimeAgo>
+        </span>
         <IconButton
           title="Favorite Bookmark"
           @click="$emit('favorite-clicked', bookmark.id)"

@@ -5,6 +5,7 @@ export interface Bookmark {
   isFavorite?: boolean;
   tags?: string[];
   isReaderMode?: boolean;
+  lastUsed?: Date;
 }
 
 export type NewBookmark = Omit<Bookmark, "id">;
@@ -19,10 +20,16 @@ export interface BookmarkTag {
   tags: string[];
 }
 
+export interface BookmarkLastUsed {
+  bookmarkId: string;
+  lastUsed?: Date;
+}
+
 export interface LocalStorage {
   theme: ThemeOption;
   tags: BookmarkTag[];
   favorites: string[];
+  recent: BookmarkLastUsed[];
 }
 
 export enum Icon {
@@ -39,4 +46,6 @@ export enum Icon {
   RightArrow = "›",
   Book = "📖",
   Web = "🖥",
+  ClosedCircle = "◷",
+  QuadrantCircle = "◔",
 }
