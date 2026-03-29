@@ -4,7 +4,7 @@ defineEmits<{ (e: "toggle-clicked"): void }>();
 </script>
 <template>
   <button
-    class="rounded-lg border border-stone-300 dark:border-gray-700 p-2 flex"
+    class="rounded-lg border border-stone-300 dark:border-stone-700 p-2 flex"
     @click="$emit('toggle-clicked')"
   >
     <div class="text-left flex-1">{{ label }}</div>

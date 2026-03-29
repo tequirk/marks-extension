@@ -17,10 +17,10 @@ defineEmits<{
 <template>
   <li
     class="flex flex-row space-x-2 p-2"
-    :class="{ 'bg-stone-200 dark:bg-gray-800': isEditing }"
+    :class="{ 'bg-stone-200 dark:bg-stone-800': isEditing }"
   >
     <button
-      class="flex-1 overflow-hidden break-words hover:bg-stone-300 dark:hover:bg-gray-700 rounded-lg p-2 flex flex-col items-start text-left"
+      class="flex-1 overflow-hidden break-words hover:bg-stone-300 dark:hover:bg-stone-700 rounded-lg p-2 flex flex-col items-start text-left"
       @click="$emit('open-bookmark', bookmark)"
     >
       <h2>{{ props.bookmark.title }}</h2>
