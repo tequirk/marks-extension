@@ -67,7 +67,7 @@ const {
   selectedBookmark,
   getBookmarks,
   getTagOptions,
-  clearTagInput
+  clearTagInput,
 );
 
 const { toggleTheme, isDarkTheme } = useTheme(themeService);
@@ -153,9 +153,8 @@ const { toggleTheme, isDarkTheme } = useTheme(themeService);
                 <ToggleInput
                   :label="'Favorite'"
                   @toggle-clicked="
-                      selectedBookmark!.isFavorite =
-                        !selectedBookmark!.isFavorite
-                    "
+                    selectedBookmark!.isFavorite = !selectedBookmark!.isFavorite
+                  "
                 >
                   {{
                     selectedBookmark.isFavorite
@@ -167,9 +166,9 @@ const { toggleTheme, isDarkTheme } = useTheme(themeService);
                   v-if="features.hasReaderMode"
                   :label="'View Mode'"
                   @toggle-clicked="
-                      selectedBookmark!.isReaderMode =
-                        !selectedBookmark!.isReaderMode
-                    "
+                    selectedBookmark!.isReaderMode =
+                      !selectedBookmark!.isReaderMode
+                  "
                 >
                   {{ selectedBookmark.isReaderMode ? Icon.Book : Icon.Web }}
                 </ToggleInput>
@@ -206,6 +205,17 @@ const { toggleTheme, isDarkTheme } = useTheme(themeService);
         </template>
       </CommandPalette>
     </template>
-    <template #footer>Created by Ryan Mason</template>
+    <template #footer
+      ><p class="text-sm/6 text-stone-400">
+        Copyright © 2026
+        <a
+          href="https://tequirk.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hover:text-stone-600 dark:hover:text-stone-300"
+          >Tequirk LLC</a
+        >. All Rights Reserved.
+      </p></template
+    >
   </SiteLayout>
 </template>

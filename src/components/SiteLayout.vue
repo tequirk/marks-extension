@@ -15,7 +15,7 @@ defineProps<{ isDarkTheme: boolean }>();
         </div>
       </div>
       <div class="py-4 flex items-center justify-center">
-        <p class="text-sm/6 text-stone-400">Copyright © 2026 <a href="https://tequirk.com" target="_blank" rel="noopener noreferrer" class="hover:text-stone-600 dark:hover:text-stone-300">Tequirk LLC</a>. All Rights Reserved.</p>
+        <slot name="footer" />
       </div>
     </div>
   </div>
