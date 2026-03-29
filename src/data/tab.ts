@@ -17,13 +17,5 @@ export const createTabDataAccessor = (tabApi: typeof browser.tabs) => {
   return { closeCurrentTab, createTab };
 };
 
-// TODO: figure out how to make vitest play nice with browser.tabs
-// maybe look at https://vitest.dev/guide/mocking.html#globals
-// eslint-disable-next-line
-export const tabData = (
-  import.meta.env.MODE !== "test"
-    ? createTabDataAccessor(browser.tabs)
-    : undefined
-)!;
-
+export const tabData = createTabDataAccessor(browser.tabs)
 export type TabData = typeof tabData;
