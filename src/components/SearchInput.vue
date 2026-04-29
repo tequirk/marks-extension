@@ -12,7 +12,7 @@ defineEmits<{
   <input
     :value="modelValue"
     autofocus
-    class="flex-1 rounded-lg mr-2 pl-2 dark:bg-gray-900"
+    class="flex-1 rounded-lg mr-2 pl-2 dark:bg-stone-900"
     :placeholder="placeholder"
     @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
     @keydown.enter="$emit('go')"

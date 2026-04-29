@@ -24,7 +24,7 @@ const inputValue = computed({
     ref="tagInput"
     v-model="inputValue"
     list="tagSuggestions"
-    class="rounded-lg border border-stone-300 dark:border-gray-700 p-2 dark:bg-gray-900"
+    class="rounded-lg border border-stone-300 dark:border-stone-700 p-2 dark:bg-stone-900"
     :placeholder="placeholder"
     @keydown.enter="$emit('add-tag')"
   />
